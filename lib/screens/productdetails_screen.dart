@@ -12,6 +12,7 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  bool ispressed = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,13 +52,21 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
-                      width: 60,
+                      width: 80,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Icon(Icons.favorite),
-                          Icon(Icons.share),
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  ispressed = !ispressed;
+                                });
+                              },
+                              icon: Icon(
+                                ispressed
+                                    ? Icons.favorite
+                                    : Icons.favorite_border_outlined,
+                              )),
+                          const Icon(Icons.share),
                         ],
                       ),
                     )
@@ -84,8 +93,32 @@ class _ProductDetailsState extends State<ProductDetails> {
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
                     ),
-                    Text(widget.product.price.toString()),
-                    Text(widget.product.description.toString())
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        children: [
+                          const Text(
+                            "Rs:",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.red),
+                          ),
+                          Text(
+                            widget.product.price.toString(),
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      widget.product.description.toString(),
+                      style: const TextStyle(
+                          fontSize: 20, fontStyle: FontStyle.italic),
+                    )
                   ],
                 ),
               ),

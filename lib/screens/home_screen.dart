@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:onlinestore/screens/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:onlinestore/screens/productdetails_screen.dart';
+import 'package:onlinestore/screens/search_screen.dart';
 import '../constant/constant.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  void filteriteam() {}
   List<ProductModel>? productmodel = [];
   Future<List<ProductModel>>? futureproduct;
   Future<List<ProductModel>> fetchData() async {
@@ -68,6 +70,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SearchScreen()));
+                        },
                         decoration: InputDecoration(
                             iconColor: kcolor,
                             suffixIcon: const Icon(Icons.search),
@@ -148,20 +156,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ],
                                     ),
-                                    Text(product.price.toString()),
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Row(
+                                        children: [
+                                          const Text(
+                                            "Rs:",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15,
+                                                color: Colors.red),
+                                          ),
+                                          Text(
+                                            product.price.toString(),
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15,
+                                                color: Colors.red),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
                             );
-                          })
-
-                      /* ListView.builder(
-                        itemCount: products.length,
-                        itemBuilder: (context, index) {
-                          final product = products[index];
-                          return Text(product.title.toString());
-                        }), */
-                      );
+                          }));
                 } else if (snapshot.hasError) {
                   return Text('${snapshot.error}');
                 }
