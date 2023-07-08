@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:onlinestore/screens/models.dart';
 import 'package:http/http.dart' as http;
+import 'package:onlinestore/screens/productdetails_screen.dart';
 import '../constant/constant.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<ProductModel>>? futureproduct;
   Future<List<ProductModel>> fetchData() async {
     final response =
-        await http.get(Uri.parse('https://fakestoreapi.com/products?limit=10'));
+        await http.get(Uri.parse('https://fakestoreapi.com/products'));
     if (response.statusCode == 200) {
       List<dynamic> data = (jsonDecode(response.body.toString()));
       return data.map((json) => ProductModel.fromJson(json)).toList();
@@ -99,49 +100,57 @@ class _HomeScreenState extends State<HomeScreen> {
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            crossAxisSpacing: 8,
-                            mainAxisSpacing: 8,
+                            crossAxisSpacing: 3,
+                            mainAxisSpacing: 3,
                           ),
                           itemBuilder: (context, index) {
                             final product = products[index];
-                            return Container(
-                              width: 180,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 120,
-                                    width: 200,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ProductDetails(
+                                            product: products[index])));
+                              },
+                              child: Container(
+                                width: 180,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 120,
+                                      width: 200,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8)),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadiusDirectional.circular(8),
+                                        child: Image.network(
+                                            product.image.toString(),
+                                            fit: BoxFit.contain),
+                                      ),
                                     ),
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadiusDirectional.circular(8),
-                                      child: Image.network(
-                                          product.image.toString(),
-                                          fit: BoxFit.contain),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          product.title.toString(),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 10),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  /*
-                                  Image.network(
-                                    product.image.toString(),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  */
-                                  Text(
-                                    product.title.toString(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(product.price.toString()),
-                                ],
+                                    Text(product.price.toString()),
+                                  ],
+                                ),
                               ),
                             );
                           })
