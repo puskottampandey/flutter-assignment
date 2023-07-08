@@ -1,10 +1,10 @@
 import 'dart:convert';
-
+import 'package:page_transition/page_transition.dart';
 import 'package:flutter/material.dart';
 import 'package:onlinestore/screens/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:onlinestore/screens/productdetails_screen.dart';
-import 'package:onlinestore/screens/search_screen.dart';
+
 import '../constant/constant.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,8 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  void filteriteam() {}
-  List<ProductModel>? productmodel = [];
+  final TextEditingController controller = TextEditingController();
   Future<List<ProductModel>>? futureproduct;
   Future<List<ProductModel>> fetchData() async {
     final response =
@@ -70,12 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SearchScreen()));
-                        },
+                        controller: controller,
                         decoration: InputDecoration(
                             iconColor: kcolor,
                             suffixIcon: const Icon(Icons.search),
@@ -117,9 +111,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               onTap: () {
                                 Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ProductDetails(
-                                            product: products[index])));
+                                    PageTransition(
+                                      duration: Duration(milliseconds: 2),
+                                      type: PageTransitionType.rightToLeft,
+                                      child: ProductDetails(
+                                          product: products[index]),
+                                    ));
                               },
                               child: Container(
                                 width: 180,
